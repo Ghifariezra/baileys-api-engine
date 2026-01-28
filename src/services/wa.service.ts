@@ -41,6 +41,7 @@ export class WAServiceImpl implements WAService {
             },
             printQRInTerminal: false,
             logger: pino({ level: "fatal" }) as any,
+            browser: ["Ubuntu", "Chrome", "20.0.04"],
         });
 
         // Event Listener: Update Creds
