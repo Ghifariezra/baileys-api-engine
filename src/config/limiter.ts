@@ -1,19 +1,15 @@
 import rateLimit from "express-rate-limit";
 
 export const limiterMiddleware = rateLimit({
-    // 1. UPDATE STANDAR (Penting)
-    // 'max' sudah deprecated di versi terbaru, gunakan 'limit'.
-    limit: 100,
+    // 1. LIMIT CONFIG
+    limit: 100, // Ganti 'max' jadi 'limit' (Benar)
     windowMs: 15 * 60 * 1000, // 15 menit
 
     // 2. HEADER CONFIG
-    // Menggunakan standar header terbaru (RateLimit-Limit, RateLimit-Remaining, dll)
     standardHeaders: true,
-    // Matikan header lama (X-RateLimit-*) agar respon lebih bersih
     legacyHeaders: false,
 
-    // 3. UX & FRONTEND FRIENDLY (Penting buat API)
-    // Daripada cuma teks string, kirim JSON agar Frontend Next.js mudah mengolahnya.
+    // 3. UX (JSON Response) - Ini sudah bagus
     message: {
         success: false,
         status: 429,
@@ -21,25 +17,22 @@ export const limiterMiddleware = rateLimit({
         message: "Anda terlalu sering melakukan request. Silakan tunggu 15 menit lagi."
     },
 
-    // 4. HANDLING PROXY (Wajib jika deploy di Vercel/Railway/VPS + Cloudflare)
-    // Jika tidak di-set, semua user mungkin terdeteksi sebagai 1 IP (IP Load Balancer)
-    // dan semua orang kena block barengan.
-    keyGenerator: (req, res) => {
-        // Ambil IP asli user jika di balik proxy/Cloudflare
-        return req.headers['x-forwarded-for']?.toString() || req.ip || "unknown";
-    },
+    // 4. HANDLING PROXY (HAPUS keyGenerator MANUAL!)
+    // Biarkan library menggunakan default 'req.ip'.
+    // Kita akan setting 'trust proxy' di server.ts agar req.ip isinya benar.
 
-    // 5. SKIP LOGIC (Opsional)
-    // Jangan batasi request dari localhost atau IP Admin tertentu
-    skip: (req, res) => {
-        const myIp = req.headers['x-forwarded-for'] || req.ip;
-        // Contoh: Skip jika IP adalah localhost
-        return myIp === '::1' || myIp === '127.0.0.1';
+    // 5. SKIP LOGIC (Sederhanakan)
+    // Gunakan req.ip langsung karena kita akan set trust proxy nanti
+    skip: (req) => {
+        return req.ip === '::1' || req.ip === '127.0.0.1';
     },
 
     // 6. FAILURE HANDLING
-    // Tetap hitung request meskipun gagal (Error 4xx/5xx).
-    // Ini bagus untuk mencegah brute-force login.
     skipFailedRequests: false,
     skipSuccessfulRequests: false,
+
+    // TAMBAHAN: Matikan validasi IP ganda biar gak error di log
+    validate: {
+        xForwardedForHeader: false,
+    },
 });
