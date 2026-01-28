@@ -1,0 +1,23 @@
+# 1. Dependency & Build
+node_modules/
+dist/
+
+# 2. Environment Variables (PENTING: RAHASIA)
+.env
+.env*
+
+# 3. Sesi WhatsApp (PENTING: BIAR GAK DIBJAK)
+auth_info_baileys/
+
+# 4. Utility Script (Opsional, boleh di-ignore kalau cuma dipake di lokal)
+generate.keys.ts
+
+# 5. Logs (Biar repo gak penuh sampah log error)
+logs/
+*.log
+npm-debug.log
+yarn-error.log
+
+# 6. File Sampah OS (Windows/Mac)
+.DS_Store
+Thumbs.db

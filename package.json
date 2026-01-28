@@ -1,0 +1,39 @@
+{
+  "name": "wa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node-dev -r dotenv/config --respawn --transpile-only src/server.ts",
+    "build": "tsc",
+    "start": "node -r dotenv/config dist/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.28.1",
+  "dependencies": {
+    "@hapi/boom": "^10.0.1",
+    "@whiskeysockets/baileys": "7.0.0-rc.9",
+    "argon2": "^0.44.0",
+    "bottleneck": "^2.19.5",
+    "bullmq": "^5.67.1",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.2.1",
+    "helmet": "^8.1.0",
+    "ioredis": "^5.9.2",
+    "pino": "^10.3.0",
+    "qrcode-terminal": "^0.12.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.0.10",
+    "@types/qrcode-terminal": "^0.12.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.9.3"
+  }
+}
