@@ -1,0 +1,5 @@
+graph 
+    User[📱 Client / Postman] -->|POST /send| API[🖥️ Express Server]
+    API -->|Simpan Job| Redis[🗄️ Redis Queue]
+    Redis -.->|Tunggu Jadwal| Worker[⚙️ WA Worker]
+    Worker -->| Eksekusi| WA[🟢 WhatsApp Cloud]

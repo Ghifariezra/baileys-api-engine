@@ -145,9 +145,57 @@ export class WAServiceImpl implements WAService {
      */
     private removeAuthFolder() {
         const folderPath = path.resolve(this.AUTH_FOLDER);
-        if (fs.existsSync(folderPath)) {
-            fs.rmSync(folderPath, { recursive: true, force: true });
-            console.log('Folder sesi dihapus.');
+
+        try {
+            // 1. Pastikan socket benar-benar mati dulu
+            if (this.sock) {
+                this.sock.end(undefined);
+                this.sock = undefined;
+            }
+
+            if (fs.existsSync(folderPath)) {
+                // 2. Coba hapus folder
+                fs.rmSync(folderPath, { recursive: true, force: true });
+                console.log('Folder sesi berhasil dihapus.');
+            }
+        } catch (error: any) {
+            // 3. TANGKAP ERROR EBUSY AGAR SERVER TIDAK CRASH
+            if (error.code === 'EBUSY' || error.code === 'EPERM') {
+                console.warn('[WARNING] Gagal menghapus folder sesi (EBUSY/Locked).');
+                console.warn('Tips: Hapus isi folder "auth_info_baileys" secara manual jika perlu.');
+
+                // Opsional: Coba hapus isi dalamnya saja (file per file)
+                try {
+                    const files = fs.readdirSync(folderPath);
+                    for (const file of files) {
+                        try {
+                            fs.unlinkSync(path.join(folderPath, file));
+                        } catch (e) { }
+                    }
+                    console.log('[INFO] Isi folder berhasil dikosongkan.');
+                } catch (e) {
+                    console.error('[ERROR] Gagal mengosongkan folder:', e);
+                }
+
+            } else {
+                console.error('[ERROR] Gagal reset sesi:', error);
+            }
+        }
+    }
+
+    public async sendPresenceUpdate(number: string, status: 'composing' | 'paused'): Promise<void> {
+        // Cek jika socket belum siap
+        if (!this.sock) {
+            console.warn('[WA] Socket disconnect, skip presence update.');
+            return;
+        }
+
+        try {
+            // Gunakan formatToJID yang sudah ada di class ini
+            const jid = this.formatToJID(number);
+            await this.sock.sendPresenceUpdate(status, jid);
+        } catch (error) {
+            console.error('[WA] Gagal kirim presence:', error);
         }
     }
 }

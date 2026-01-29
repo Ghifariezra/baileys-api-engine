@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+    # Service 1: WA Gateway Application
+    wa-gateway:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: wa-gateway-app
+        restart: unless-stopped
+        ports:
+            # Format: "${PORT_HOST}:${PORT_CONTAINER}"
+            - "${PORT}:${PORT}"
+
+        env_file:
+            - .env
+
+        environment:
+            - PORT=${PORT}
+            - REDIS_HOST=${REDIS_HOST}
+            - REDIS_PORT=${REDIS_PORT}
+            - REDIS_PASSWORD=${REDIS_PASSWORD}
+            - API_SECRET_HASH=${API_SECRET_HASH}
+
+        volumes:
+            - ./auth_info_baileys:/app/auth_info_baileys
+        depends_on:
+            - redis-queue
+
+    # Service 2: Redis
+    redis-queue:
+        image: redis:alpine
+        container_name: redis-wa-queue
+        restart: always
+        command: redis-server --requirepass ${REDIS_PASSWORD} --maxmemory-policy noeviction
+        volumes:
+            - redis_data:/data
+        ports:
+            - "${REDIS_PORT}:${REDIS_PORT}"
+
+volumes:
+    redis_data:
