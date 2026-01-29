@@ -137,4 +137,7 @@ new Date(Date.now() + 5 * 60 * 1000).toISOString()
 
 This project is open-source and available under the MIT License.
 
-**Disclaimer:** This project is not affiliated with WhatsApp. Use responsibly and at your own risk.
+## ⚠️ Disclaimer
+> This project is not affiliated, associated, authorized, endorsed by, or in any way officially connected with WhatsApp or any of its subsidiaries or its affiliates. The official WhatsApp website can be found at https://whatsapp.com.
+
+> This code is provided for **educational purposes only**. The developer is not responsible for any misuse of this bot, including but not limited to spamming, account banning, or legal consequences caused by the user's actions. Use at your own risk.
