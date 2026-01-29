@@ -11,6 +11,12 @@ export class BullService {
     private connection: IORedis;
     private readonly WA_QUEUE_NAME = 'whatsapp-queue';
 
+    /**
+     * Private constructor untuk membuat instance BullService.
+     * Constructor ini akan melakukan inisialisasi koneksi Redis,
+     * setup listener koneksi Redis, membuat Queue (Producer) WA,
+     * dan membuat Worker (Consumer) WA.
+     */
     private constructor() {
         this.validateEnv();
 
@@ -67,6 +73,12 @@ export class BullService {
         this.setupWorkerListeners();
     }
 
+    /**
+     * Returns a singleton instance of the BullService.
+     * The instance is created the first time this method is called,
+     * and the same instance is returned on subsequent calls.
+     * @returns {BullService} The singleton instance of the BullService.
+     */
     public static getInstance(): BullService {
         if (!BullService.instance) {
             BullService.instance = new BullService();

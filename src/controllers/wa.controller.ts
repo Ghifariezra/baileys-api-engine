@@ -35,7 +35,7 @@ export class WAController {
                 if (diff > 0) delay = diff;
             }
 
-            console.log(`[QUEUE] Memproses pesan ke: ${number}`);
+            // console.log(`[QUEUE] Memproses pesan ke: ${number}`);
 
             // Masukkan ke Redis
             const job = await this.bullService.waQueue.add('send-message', {

@@ -11,7 +11,6 @@ import qrcode from 'qrcode-terminal';
 import fs from 'fs';
 import path from 'path';
 import { WAService } from '../contract/wa';
-// HAPUS IMPORT BOTTLENECK
 
 export class WAServiceImpl implements WAService {
     private static instance: WAServiceImpl;
@@ -21,6 +20,12 @@ export class WAServiceImpl implements WAService {
     // HAPUS constructor private yang ada Bottleneck-nya
     private constructor() { }
 
+    /**
+     * Returns a singleton instance of the WAServiceImpl.
+     * The instance is created the first time this method is called,
+     * and the same instance is returned on subsequent calls.
+     * @returns {WAServiceImpl} The singleton instance of the WAServiceImpl.
+     */
     public static getInstance(): WAServiceImpl {
         if (!WAServiceImpl.instance) {
             WAServiceImpl.instance = new WAServiceImpl();
@@ -162,7 +167,7 @@ export class WAServiceImpl implements WAService {
             // 3. TANGKAP ERROR EBUSY AGAR SERVER TIDAK CRASH
             if (error.code === 'EBUSY' || error.code === 'EPERM') {
                 console.warn('[WARNING] Gagal menghapus folder sesi (EBUSY/Locked).');
-                console.warn('Tips: Hapus isi folder "auth_info_baileys" secara manual jika perlu.');
+                // console.warn('Tips: Hapus isi folder "auth_info_baileys" secara manual jika perlu.');
 
                 // Opsional: Coba hapus isi dalamnya saja (file per file)
                 try {
