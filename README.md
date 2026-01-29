@@ -18,14 +18,8 @@ A high-performance, self-hosted WhatsApp Gateway API built with **Node.js**, **B
 ---
 
 ## 🛠️ Architecture
-```mermaid
-graph LR
-    User[Client / Postman] -->|POST /send| API[Express API]
-    API -->|1. Validate & Hash| Auth[Argon2 Auth]
-    Auth -->|2. Add Job| Redis[Redis Queue]
-    Redis -.->|3. Wait Schedule| Worker[Smart Worker]
-    Worker -->|4. Humanize & Send| WA[WhatsApp Server]
-```
+
+![Pipeline](public/architecture.png)
 
 ## ⚙️ Environment Variables
 
